@@ -1,50 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sticky Note Design</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IG Square – Line 1</title>
+
   <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+
   <style>
-    :root {
-      --bg-gradient: radial-gradient(circle at center, #2c2c2c, #1a1a1a); /* dark gradient */
-      --note-color: #FFD24D;
-      --note-shadow: 0 8px 20px rgba(0,0,0,0.3);
-      --text-color: #222;
+    /* ===== Tokens ===== */
+    :root{
+      --bg0:#0f1115;     /* dark charcoal */
+      --bg1:#1a1f2b;     /* dim navy */
+      --note:#FFD24D;    /* sticky yellow */
+      --ink:#1b1b1b;     /* softer than black */
+      --shadow:0 28px 70px rgba(0,0,0,.45);
+      --safe:64px;       /* inner safe padding for IG edges on large screens */
+      --radius:28px;
     }
 
-    body {
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--bg-gradient);
-      font-family: 'Poppins', sans-serif;
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Poppins,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      color:#e8eaed;
+      /* Dark comfortable background with a faint wave pattern */
+      background:
+        radial-gradient(1400px 900px at 50% 20%, rgba(255,255,255,.06), transparent 60%),
+        radial-gradient(900px 640px at 80% 120%, rgba(255,255,255,.04), transparent 70%),
+        /* subtle waves via inline SVG */
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cpath d='M0 120c40-40 80 40 120 0s80 40 120 0' fill='none' stroke='%23ffffff' stroke-opacity='.035' stroke-width='16'/%3E%3C/svg%3E"),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      background-size:auto,auto,480px 480px,auto;
+      background-attachment:fixed;
+      display:grid;
+      place-items:center;
+      padding:16px;
     }
 
-    .note {
-      background: var(--note-color);
-      width: 80%;
-      max-width: 600px;
-      aspect-ratio: 1 / 1; /* keeps it square */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      font-size: clamp(24px, 5vw, 48px);
-      font-weight: 600;
-      color: var(--text-color);
-      border-radius: 12px;
-      box-shadow: var(--note-shadow);
-      padding: 20px;
+    /* Square frame that always stays 1:1 and centered */
+    .frame{
+      width:min(95vmin,1080px);
+      aspect-ratio:1/1;
+      position:relative;
+      border-radius:32px;
+      padding:clamp(20px, 4vmin, var(--safe));
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+    }
+
+    /* Soft glow behind the card for depth */
+    .glow{
+      position:absolute; inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(420px 320px at 50% 58%, rgba(255,210,77,.22), transparent 60%);
+      filter:blur(32px);
+      opacity:.7;
+    }
+
+    /* Sticky note with jagged edges (clip-path polygon) */
+    .note{
+      background:var(--note);
+      color:var(--ink);
+      width:min(78%, 780px);
+      height:auto;
+      min-height:min(60%, 680px);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding:clamp(20px, 4.5vmin, 48px);
+      box-shadow:var(--shadow);
+      position:relative;
+      /* Rough paper silhouette */
+      clip-path: polygon(
+        10% 2%,  90% 0%,  95% 8%,  98% 20%,
+        96% 32%, 98% 45%, 92% 58%, 96% 68%,
+        92% 80%, 88% 90%, 75% 96%, 60% 98%,
+        48% 100%, 36% 96%, 24% 98%, 14% 92%,
+        8% 84%,  4% 72%,  6% 60%,  4% 48%,
+        6% 36%,  4% 24%,  6% 14%
+      );
+    }
+
+    /* subtle paper texture / bevel */
+    .note::before{
+      content:"";
+      position:absolute; inset:0;
+      background:
+        radial-gradient(rgba(255,255,255,.25) 1px, transparent 1px),
+        linear-gradient(transparent, rgba(0,0,0,.03));
+      background-size:6px 6px, 100% 100%;
+      mix-blend-mode:soft-light;
+      pointer-events:none;
+    }
+    .note::after{
+      content:""; position:absolute; inset:0;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.4), inset 0 -1px 0 rgba(0,0,0,.12);
+      pointer-events:none;
+    }
+
+    /* Optional masking tape corners (enable if you want) */
+    .tape{ display:none; }       /* set to block to show */
+    .tape span{
+      position:absolute; width:120px; height:38px;
+      background:linear-gradient(180deg, rgba(255,255,255,.78), rgba(255,255,255,.58));
+      border-radius:6px; box-shadow:0 8px 18px rgba(0,0,0,.25);
+      mix-blend-mode:screen; opacity:.9;
+    }
+    .tape .tl{ top:-12px; left:18%; rotate:-12deg; }
+    .tape .tr{ top:-16px; right:18%; rotate:10deg; }
+
+    h1{
+      margin:0;
+      font-weight:700;
+      font-size:clamp(30px, 6.5vmin, 76px);
+      line-height:1.12;
+      letter-spacing:-.02em;
+    }
+
+    /* Small screens */
+    @media (max-width:520px){
+      .frame{ padding:24px; }
+      .note{ min-height:62%; width:100%; }
     }
   </style>
 </head>
 <body>
-  <div class="note">
-    Line 1
-  </div>
+
+  <main class="frame" role="img" aria-label="Centered jagged yellow sticky note on a dark wave background">
+    <span class="glow"></span>
+
+    <!-- turn on if you want tape -->
+    <div class="tape">
+      <span class="tl"></span>
+      <span class="tr"></span>
+    </div>
+
+    <section class="note">
+      <h1>Line 1</h1>
+    </section>
+  </main>
+
 </body>
 </html>
+
