@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sticky Note Design</title>
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient: radial-gradient(circle at center, #2c2c2c, #1a1a1a); /* dark gradient */
+      --note-color: #FFD24D;
+      --note-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      --text-color: #222;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-gradient);
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .note {
+      background: var(--note-color);
+      width: 80%;
+      max-width: 600px;
+      aspect-ratio: 1 / 1; /* keeps it square */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: clamp(24px, 5vw, 48px);
+      font-weight: 600;
+      color: var(--text-color);
+      border-radius: 12px;
+      box-shadow: var(--note-shadow);
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="note">
+    Line 1
+  </div>
+</body>
+</html>
